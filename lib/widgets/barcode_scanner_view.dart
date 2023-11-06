@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
@@ -15,11 +17,10 @@ class BarcodeScannerView extends StatefulWidget {
 enum DetectorViewMode { liveFeed, gallery }
 
 class _BarcodeScannerViewState extends State<BarcodeScannerView> {
-  final BarcodeScanner _barcodeScanner = BarcodeScanner();
+  BarcodeScanner _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
-  String? _text;
   final _cameraLensDirection = CameraLensDirection.back;
 
   @override
@@ -44,40 +45,40 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
   Future<void> _processImage(InputImage inputImage) async {
     if (!_canProcess) return;
     if (_isBusy) return;
+
     _isBusy = true;
-    setState(() {
-      _text = '';
-    });
 
     final List<BarcodeFormat> formats = [BarcodeFormat.all];
-    final barcodeScanner = BarcodeScanner(formats: formats);
-    final barcodes = await barcodeScanner.processImage(inputImage);
+    _barcodeScanner = BarcodeScanner(formats: formats);
 
-    for (Barcode barcode in barcodes) {
-      final BarcodeType type = barcode.type;
-      final Rect boundingBox = barcode.boundingBox;
-      final String? displayValue = barcode.displayValue;
-      final String? rawValue = barcode.rawValue;
+    try {
+      await _barcodeScanner.processImage(inputImage).then((barcodes) {
+        for (Barcode barcode in barcodes) {
+          final BarcodeType type = barcode.type;
+          final Rect boundingBox = barcode.boundingBox;
+          final String? displayValue = barcode.displayValue;
+          final String? rawValue = barcode.rawValue;
 
-      if (displayValue != null) {
-        print(displayValue);
-        if (displayValue.length == 46) {
-          //34191.75124 34567.871230 41234.560005 4 95250000026035
-          //0341949525000002603517512345678712341234560000
-          //0341949525000002603517512345678712341234560000
+          if (displayValue != null) {
+            if (displayValue.length == 46) {
+              _canProcess = false;
+              //34191.75124 34567.871230 41234.560005 4 95250000026035
+              //0341949525000002603517512345678712341234560000
+              //0341949525000002603517512345678712341234560000
 
-          await _closeScanner(displayValue).then((value) => Navigator.pop(context));
+              widget.onDetectBarCode.call(displayValue);
+              Navigator.pop(context);
+            }
+          }
         }
-      }
+      });
+    } catch (error) {
+      log(error.toString());
     }
 
     _isBusy = false;
     if (mounted) {
       setState(() {});
     }
-  }
-
-  Future<void> _closeScanner(String barcode) async {
-    widget.onDetectBarCode.call(barcode);
   }
 }

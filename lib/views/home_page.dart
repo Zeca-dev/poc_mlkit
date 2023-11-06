@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
                 onDetectBarCode: (barcode) {
                   setState(() {
                     _barCode = barcode;
+                    print(_barCode);
                   });
                 },
               ),
