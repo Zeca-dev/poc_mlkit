@@ -9,7 +9,7 @@ class CameraView extends StatefulWidget {
   const CameraView(
       {Key? key,
       required this.customPaint,
-      required this.onImage,
+      required this.onCaptureImage,
       this.onCameraFeedReady,
       this.onDetectorViewModeChanged,
       this.onCameraLensDirectionChanged,
@@ -17,7 +17,7 @@ class CameraView extends StatefulWidget {
       : super(key: key);
 
   final CustomPaint? customPaint;
-  final Function(InputImage inputImage) onImage;
+  final Function(InputImage inputImage) onCaptureImage;
   final VoidCallback? onCameraFeedReady;
   final VoidCallback? onDetectorViewModeChanged;
   final Function(CameraLensDirection direction)? onCameraLensDirectionChanged;
@@ -64,6 +64,7 @@ class _CameraViewState extends State<CameraView> {
   @override
   void dispose() {
     _stopLiveFeed();
+
     super.dispose();
   }
 
@@ -86,16 +87,69 @@ class _CameraViewState extends State<CameraView> {
                 ? const Center(
                     child: Text('Changing camera lens'),
                   )
-                : CameraPreview(
-                    _controller!,
-                    child: widget.customPaint,
+                : SizedBox.expand(
+                    child: CameraPreview(
+                      _controller!,
+                      child: Center(
+                        child: OrientationBuilder(builder: (context, orientation) {
+                          if (orientation == Orientation.portrait) {
+                            return const RotatedBox(
+                              quarterTurns: 3,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'TESTE 1',
+                                    style: TextStyle(color: Colors.amber),
+                                  ),
+                                  Text(
+                                    'TESTE 1',
+                                    style: TextStyle(color: Colors.amber),
+                                  ),
+                                  Text(
+                                    'TESTE 1',
+                                    style: TextStyle(color: Colors.amber),
+                                  ),
+                                  Text(
+                                    'TESTE 1',
+                                    style: TextStyle(color: Colors.amber),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'TESTE 2',
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                                Text(
+                                  'TESTE 2',
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                                Text(
+                                  'TESTE 2',
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                                Text(
+                                  'TESTE 2',
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                      ), //widget.customPaint,
+                    ),
                   ),
           ),
           _backButton(),
-          _switchLiveCameraToggle(),
-          _detectionViewModeToggle(),
-          _zoomControl(),
-          _exposureControl(),
+          // _switchLiveCameraToggle(),
+          // _detectionViewModeToggle(),
+          // _zoomControl(),
+          // _exposureControl(),
         ],
       ),
     );
@@ -262,6 +316,7 @@ class _CameraViewState extends State<CameraView> {
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
     );
+
     _controller?.initialize().then((_) {
       if (!mounted) {
         return;
@@ -288,6 +343,7 @@ class _CameraViewState extends State<CameraView> {
           widget.onCameraLensDirectionChanged!(camera.lensDirection);
         }
       });
+
       setState(() {});
     });
   }
@@ -310,7 +366,7 @@ class _CameraViewState extends State<CameraView> {
   void _processCameraImage(CameraImage image) {
     final inputImage = _inputImageFromCameraImage(image);
     if (inputImage == null) return;
-    widget.onImage(inputImage);
+    widget.onCaptureImage(inputImage);
   }
 
   final _orientations = {

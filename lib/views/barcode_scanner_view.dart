@@ -34,7 +34,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
   Widget build(BuildContext context) {
     return CameraView(
       customPaint: null,
-      onImage: _processImage,
+      onCaptureImage: _processImage,
       onCameraFeedReady: null,
       onDetectorViewModeChanged: null,
       initialCameraLensDirection: CameraLensDirection.back,
