@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:poc_mlkit/widgets/barcode_scanner_view.dart';
+import 'package:poc_mlkit/views/barcode_scanner_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});

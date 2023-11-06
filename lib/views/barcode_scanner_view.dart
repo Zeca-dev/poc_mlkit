@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/widgets/camera_view.dart';
+import 'package:poc_mlkit/views/camera_view.dart';
 
 class BarcodeScannerView extends StatefulWidget {
   const BarcodeScannerView({super.key, required this.onDetectBarCode});
