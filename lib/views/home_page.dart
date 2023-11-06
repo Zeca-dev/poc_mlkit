@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final int _counter = 0;
   String _barCode = '';
 
   @override
