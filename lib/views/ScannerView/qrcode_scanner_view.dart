@@ -42,11 +42,13 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
                           Expanded(
                             flex: 3,
                             child: Container(
+                              width: MediaQuery.sizeOf(context).width,
                               decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   border: Border.all(
                                     color: Colors.red,
                                   )),
+                              child: const Text('QRCode'),
                             ),
                           ),
                           Expanded(

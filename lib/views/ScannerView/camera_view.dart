@@ -55,6 +55,7 @@ class _CameraViewState extends State<CameraView> {
   @override
   void dispose() {
     _stopCamera();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     super.dispose();
   }
@@ -84,7 +85,7 @@ class _CameraViewState extends State<CameraView> {
                 }),
               ScannerType.BARCODE => OrientationBuilder(builder: (context, orientation) {
                   if (orientation == Orientation.portrait) {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
                     return RotatedBox(quarterTurns: 3, child: widget.layout);
                   } else {
                     return widget.layout;

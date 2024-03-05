@@ -42,11 +42,13 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
                           Expanded(
                             flex: 3,
                             child: Container(
+                              width: MediaQuery.sizeOf(context).width,
                               decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   border: Border.all(
                                     color: Colors.red,
                                   )),
+                              child: const Text('Barcode'),
                             ),
                           ),
                           Expanded(
