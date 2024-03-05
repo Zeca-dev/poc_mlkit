@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:poc_mlkit/views/scanner_type_enum.dart';
-import 'package:poc_mlkit/views/scanner_view.dart';
+import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
+import 'package:poc_mlkit/views/ScannerView/scanner_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});

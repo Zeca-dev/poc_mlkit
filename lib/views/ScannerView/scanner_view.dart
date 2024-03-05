@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/camera_view.dart';
+import 'package:poc_mlkit/views/ScannerView/barcode_scanner_view.dart';
+import 'package:poc_mlkit/views/ScannerView/camera_view.dart';
+import 'package:poc_mlkit/views/ScannerView/qrcode_scanner_view.dart';
 
 import 'scanner_type_enum.dart';
 
@@ -23,25 +24,24 @@ class _ScannerViewState extends State<ScannerView> {
   BarcodeScanner _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
   bool _isBusy = false;
-  CustomPaint? _customPaint;
-  final _cameraLensDirection = CameraLensDirection.back;
 
   @override
   void dispose() {
     _canProcess = false;
     _barcodeScanner.close();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CameraView(
-      customPaint: null,
+      layout: switch (widget.scannerType) {
+        ScannerType.BARCODE => const BarcodeScannerView(),
+        ScannerType.QRCODE => const QrCodeScannerView(),
+      },
+      scannerType: widget.scannerType,
       onCaptureImage: _processImage,
-      onCameraFeedReady: null,
-      onDetectorViewModeChanged: null,
-      initialCameraLensDirection: CameraLensDirection.back,
-      onCameraLensDirectionChanged: null,
     );
   }
 
@@ -61,10 +61,7 @@ class _ScannerViewState extends State<ScannerView> {
     try {
       await _barcodeScanner.processImage(inputImage).then((barcodes) {
         for (Barcode barcode in barcodes) {
-          final BarcodeType type = barcode.type;
-          final Rect boundingBox = barcode.boundingBox;
           final String? displayValue = barcode.displayValue;
-          final String? rawValue = barcode.rawValue;
 
           switch (widget.scannerType) {
             case ScannerType.BARCODE:
