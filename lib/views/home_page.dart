@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+
 import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_view.dart';
 
