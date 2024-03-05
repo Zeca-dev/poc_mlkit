@@ -5,18 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:poc_mlkit/views/camera_view.dart';
 
-class BarcodeScannerView extends StatefulWidget {
-  const BarcodeScannerView({super.key, required this.onDetectBarCode});
+import 'scanner_type_enum.dart';
 
-  final Function(String) onDetectBarCode;
+class ScannerView extends StatefulWidget {
+  const ScannerView({super.key, required this.scannerType, required this.onDetect});
+
+  final ScannerType scannerType;
+  final Function(String) onDetect;
 
   @override
-  State<BarcodeScannerView> createState() => _BarcodeScannerViewState();
+  State<ScannerView> createState() => _ScannerViewState();
 }
 
 enum DetectorViewMode { liveFeed, gallery }
 
-class _BarcodeScannerViewState extends State<BarcodeScannerView> {
+class _ScannerViewState extends State<ScannerView> {
   BarcodeScanner _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
   bool _isBusy = false;
@@ -48,7 +51,11 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
 
     _isBusy = true;
 
-    final List<BarcodeFormat> formats = [BarcodeFormat.all];
+    final List<BarcodeFormat> formats = switch (widget.scannerType) {
+      ScannerType.BARCODE => [BarcodeFormat.itf],
+      ScannerType.QRCODE => [BarcodeFormat.qrCode],
+    };
+
     _barcodeScanner = BarcodeScanner(formats: formats);
 
     try {
@@ -59,16 +66,27 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
           final String? displayValue = barcode.displayValue;
           final String? rawValue = barcode.rawValue;
 
-          if (displayValue != null) {
-            if (displayValue.length == 46) {
-              _canProcess = false;
-              //34191.75124 34567.871230 41234.560005 4 95250000026035
-              //0341949525000002603517512345678712341234560000
-              //0341949525000002603517512345678712341234560000
+          switch (widget.scannerType) {
+            case ScannerType.BARCODE:
+              {
+                if (displayValue != null) {
+                  if (displayValue.length == 46) {
+                    _canProcess = false;
 
-              widget.onDetectBarCode.call(displayValue);
-              Navigator.pop(context);
-            }
+                    widget.onDetect.call(displayValue);
+                    Navigator.pop(context);
+                  }
+                }
+              }
+
+            case ScannerType.QRCODE:
+              {
+                if (displayValue != null) {
+                  _canProcess = false;
+                  widget.onDetect.call(displayValue);
+                  Navigator.pop(context);
+                }
+              }
           }
         }
       });
