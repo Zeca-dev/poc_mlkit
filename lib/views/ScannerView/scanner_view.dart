@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:poc_mlkit/views/ScannerView/barcode_scanner_view.dart';
 import 'package:poc_mlkit/views/ScannerView/camera_view.dart';
@@ -37,7 +38,7 @@ class _ScannerViewState extends State<ScannerView> {
   Widget build(BuildContext context) {
     return CameraView(
       layout: switch (widget.scannerType) {
-        ScannerType.BARCODE => const BarcodeScannerView(),
+        ScannerType.BARCODE => const BarcodeScannerView(deviceOrientation: DeviceOrientation.landscapeRight),
         ScannerType.QRCODE => const QrCodeScannerView(),
       },
       scannerType: widget.scannerType,
@@ -67,6 +68,7 @@ class _ScannerViewState extends State<ScannerView> {
             case ScannerType.BARCODE:
               {
                 if (displayValue != null) {
+                  log(displayValue);
                   if (displayValue.length == 46) {
                     _canProcess = false;
 

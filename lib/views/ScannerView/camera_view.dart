@@ -1,11 +1,9 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-
 import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_view_layout.dart';
 
@@ -78,18 +76,14 @@ class _CameraViewState extends State<CameraView> {
               ScannerType.QRCODE => OrientationBuilder(builder: (context, orientation) {
                   if (orientation == Orientation.landscape) {
                     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                    return RotatedBox(quarterTurns: 3, child: widget.layout);
-                  } else {
-                    return widget.layout;
                   }
+                  return widget.layout;
                 }),
               ScannerType.BARCODE => OrientationBuilder(builder: (context, orientation) {
                   if (orientation == Orientation.portrait) {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
-                    return RotatedBox(quarterTurns: 3, child: widget.layout);
-                  } else {
-                    return widget.layout;
+                    SystemChrome.setPreferredOrientations([widget.layout.deviceOrientation]);
                   }
+                  return widget.layout;
                 }),
             },
           ),
@@ -111,6 +105,17 @@ class _CameraViewState extends State<CameraView> {
     _controller?.initialize().then((_) {
       if (!mounted) {
         return;
+      }
+      switch (widget.scannerType) {
+        case ScannerType.QRCODE:
+          _controller?.lockCaptureOrientation(DeviceOrientation.portraitUp);
+
+        case ScannerType.BARCODE:
+          if (widget.layout.deviceOrientation == DeviceOrientation.landscapeRight) {
+            _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+          } else {
+            _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
+          }
       }
 
       _controller?.startImageStream(_processCameraImage).then((value) {});

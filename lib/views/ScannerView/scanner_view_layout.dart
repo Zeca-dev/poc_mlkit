@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ScannerViewLayout extends StatefulWidget {
-  const ScannerViewLayout({super.key});
+  const ScannerViewLayout({super.key, required this.deviceOrientation});
+
+  final DeviceOrientation deviceOrientation;
 
   @override
   State<ScannerViewLayout> createState() => _ScannerViewLayoutState();

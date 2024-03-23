@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_view_layout.dart';
 
 class BarcodeScannerView extends ScannerViewLayout {
-  const BarcodeScannerView({super.key});
+  const BarcodeScannerView({super.key, super.deviceOrientation = DeviceOrientation.landscapeRight});
 
   @override
   State<BarcodeScannerView> createState() => _BarcodeScannerViewState();
