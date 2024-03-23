@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
+import 'package:poc_mlkit/views/camera/camera_view_layout.dart';
 
-class ScannerViewLayout extends StatefulWidget {
-  const ScannerViewLayout({super.key, required this.deviceOrientation});
+abstract class ScannerViewLayout extends CameraViewLayout {
+  const ScannerViewLayout({
+    super.key,
+    required super.deviceOrientation,
+    required this.scannerType,
+  });
 
-  final DeviceOrientation deviceOrientation;
+  final ScannerType scannerType;
 
   @override
   State<ScannerViewLayout> createState() => _ScannerViewLayoutState();

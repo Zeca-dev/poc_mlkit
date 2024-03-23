@@ -1,8 +1,14 @@
-// ignore_for_file: constant_identifier_names
-
+///Define o tipo de scanner.
+///
+/// [QRCODE_SCANNER, BARCODE_SCANNER]
 enum ScannerType {
-  BARCODE(type: 'BARCODE'),
-  QRCODE(type: 'QRCODE');
+  ///Leitor de QRCode
+  ///
+  QRCODE_SCANNER(type: 'QRCODE_SCANNER'),
+
+  ///Leitor de códigos de barra
+  ///
+  BARCODE_SCANNER(type: 'BARCODE_SCANNER');
 
   final String type;
 

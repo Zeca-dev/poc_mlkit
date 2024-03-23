@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:poc_mlkit/views/ScannerView/barcode_scanner_view.dart';
+import 'package:poc_mlkit/views/ScannerView/qrcode_scanner_view.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_view.dart';
 
@@ -42,13 +44,13 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton(
-            heroTag: ScannerType.QRCODE,
+            heroTag: ScannerType.QRCODE_SCANNER,
             onPressed: () async {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ScannerView(
-                    scannerType: ScannerType.QRCODE,
+                    scannerViewLayout: const QrCodeScannerView(),
                     onDetect: (result) {
                       setState(() {
                         _result = result;
@@ -63,13 +65,15 @@ class _HomePageState extends State<HomePage> {
             child: const Icon(Icons.qr_code),
           ),
           FloatingActionButton(
-            heroTag: ScannerType.BARCODE,
+            heroTag: ScannerType.BARCODE_SCANNER,
             onPressed: () async {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ScannerView(
-                    scannerType: ScannerType.BARCODE,
+                    scannerViewLayout: const BarcodeScannerView(
+                      deviceOrientation: DeviceOrientation.landscapeLeft,
+                    ),
                     onDetect: (result) {
                       setState(() {
                         _result = result;

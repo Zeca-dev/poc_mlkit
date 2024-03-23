@@ -4,26 +4,26 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
-import 'package:poc_mlkit/views/ScannerView/scanner_view_layout.dart';
+import 'package:poc_mlkit/views/ScannerView/barcode_scanner_view.dart';
+import 'package:poc_mlkit/views/camera/camera_view_layout.dart';
 
-class CameraView extends StatefulWidget {
-  const CameraView({
+import '../ScannerView/qrcode_scanner_view.dart';
+
+class CameraPreviewApp extends StatefulWidget {
+  const CameraPreviewApp({
     Key? key,
-    required this.layout,
+    required this.cameraViewLayout,
     required this.onCaptureImage,
-    required this.scannerType,
   }) : super(key: key);
 
-  final ScannerViewLayout layout;
+  final CameraViewLayout cameraViewLayout;
   final Function(InputImage inputImage) onCaptureImage;
-  final ScannerType scannerType;
 
   @override
-  State<CameraView> createState() => _CameraViewState();
+  State<CameraPreviewApp> createState() => _CameraPreviewAppState();
 }
 
-class _CameraViewState extends State<CameraView> {
+class _CameraPreviewAppState extends State<CameraPreviewApp> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
@@ -67,24 +67,26 @@ class _CameraViewState extends State<CameraView> {
     if (_cameras.isEmpty) return Container();
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
+
     return SafeArea(
       child: SizedBox.expand(
         child: CameraPreview(
           _controller!,
           child: Center(
-            child: switch (widget.scannerType) {
-              ScannerType.QRCODE => OrientationBuilder(builder: (context, orientation) {
+            child: switch (widget.cameraViewLayout.runtimeType) {
+              QrCodeScannerView => OrientationBuilder(builder: (context, orientation) {
                   if (orientation == Orientation.landscape) {
                     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
                   }
-                  return widget.layout;
+                  return widget.cameraViewLayout;
                 }),
-              ScannerType.BARCODE => OrientationBuilder(builder: (context, orientation) {
+              BarcodeScannerView => OrientationBuilder(builder: (context, orientation) {
                   if (orientation == Orientation.portrait) {
-                    SystemChrome.setPreferredOrientations([widget.layout.deviceOrientation]);
+                    SystemChrome.setPreferredOrientations([widget.cameraViewLayout.deviceOrientation]);
                   }
-                  return widget.layout;
+                  return widget.cameraViewLayout;
                 }),
+              _ => widget.cameraViewLayout
             },
           ),
         ),
@@ -106,16 +108,20 @@ class _CameraViewState extends State<CameraView> {
       if (!mounted) {
         return;
       }
-      switch (widget.scannerType) {
-        case ScannerType.QRCODE:
-          _controller?.lockCaptureOrientation(DeviceOrientation.portraitUp);
 
-        case ScannerType.BARCODE:
-          if (widget.layout.deviceOrientation == DeviceOrientation.landscapeRight) {
+      final cameraView = widget.cameraViewLayout;
+      _controller?.lockCaptureOrientation(DeviceOrientation.portraitUp);
+
+      if (cameraView is QrCodeScannerView) {
+        _controller?.lockCaptureOrientation(DeviceOrientation.portraitUp);
+      }
+      if (cameraView is BarcodeScannerView) {
+        switch (cameraView.deviceOrientation) {
+          case DeviceOrientation.landscapeRight:
             _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
-          } else {
+          default:
             _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
-          }
+        }
       }
 
       _controller?.startImageStream(_processCameraImage).then((value) {});

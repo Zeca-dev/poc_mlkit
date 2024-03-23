@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:poc_mlkit/views/ScannerView/scanner_type_enum.dart';
 import 'package:poc_mlkit/views/ScannerView/scanner_view_layout.dart';
 
 class QrCodeScannerView extends ScannerViewLayout {
-  const QrCodeScannerView({super.key, super.deviceOrientation = DeviceOrientation.portraitUp});
+  const QrCodeScannerView({
+    super.key,
+    super.deviceOrientation = DeviceOrientation.portraitUp,
+  }) : super(scannerType: ScannerType.QRCODE_SCANNER);
 
   @override
   State<QrCodeScannerView> createState() => _QrCodeScannerViewState();

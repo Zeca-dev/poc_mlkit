@@ -1,18 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/ScannerView/barcode_scanner_view.dart';
-import 'package:poc_mlkit/views/ScannerView/camera_view.dart';
-import 'package:poc_mlkit/views/ScannerView/qrcode_scanner_view.dart';
+import 'package:poc_mlkit/views/ScannerView/scanner_view_layout.dart';
+import 'package:poc_mlkit/views/camera/camera_preview_app.dart';
 
 import 'scanner_type_enum.dart';
 
 class ScannerView extends StatefulWidget {
-  const ScannerView({super.key, required this.scannerType, required this.onDetect});
+  const ScannerView({
+    super.key,
+    required this.scannerViewLayout,
+    required this.onDetect,
+  });
 
-  final ScannerType scannerType;
+  final ScannerViewLayout scannerViewLayout;
   final Function(String) onDetect;
 
   @override
@@ -36,12 +38,8 @@ class _ScannerViewState extends State<ScannerView> {
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      layout: switch (widget.scannerType) {
-        ScannerType.BARCODE => const BarcodeScannerView(deviceOrientation: DeviceOrientation.landscapeRight),
-        ScannerType.QRCODE => const QrCodeScannerView(),
-      },
-      scannerType: widget.scannerType,
+    return CameraPreviewApp(
+      cameraViewLayout: widget.scannerViewLayout,
       onCaptureImage: _processImage,
     );
   }
@@ -52,9 +50,9 @@ class _ScannerViewState extends State<ScannerView> {
 
     _isBusy = true;
 
-    final List<BarcodeFormat> formats = switch (widget.scannerType) {
-      ScannerType.BARCODE => [BarcodeFormat.itf],
-      ScannerType.QRCODE => [BarcodeFormat.qrCode],
+    final List<BarcodeFormat> formats = switch (widget.scannerViewLayout.scannerType) {
+      ScannerType.BARCODE_SCANNER => [BarcodeFormat.itf],
+      ScannerType.QRCODE_SCANNER => [BarcodeFormat.qrCode],
     };
 
     _barcodeScanner = BarcodeScanner(formats: formats);
@@ -64,8 +62,8 @@ class _ScannerViewState extends State<ScannerView> {
         for (Barcode barcode in barcodes) {
           final String? displayValue = barcode.displayValue;
 
-          switch (widget.scannerType) {
-            case ScannerType.BARCODE:
+          switch (widget.scannerViewLayout.scannerType) {
+            case ScannerType.BARCODE_SCANNER:
               {
                 if (displayValue != null) {
                   log(displayValue);
@@ -78,7 +76,7 @@ class _ScannerViewState extends State<ScannerView> {
                 }
               }
 
-            case ScannerType.QRCODE:
+            case ScannerType.QRCODE_SCANNER:
               {
                 if (displayValue != null) {
                   _canProcess = false;
