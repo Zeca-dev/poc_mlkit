@@ -3,17 +3,26 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_preview_app.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_type_enum.dart';
+import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class BarcodeScannerView extends StatefulWidget {
+  ///Essa define o um scanner de códigos de barra.
+  ///
   const BarcodeScannerView({
     super.key,
     required this.onDetect,
     this.deviceOrientation = DeviceOrientation.landscapeRight,
   });
 
+  ///Define a orientação padrão da preview.
+  ///
+  ///Opções: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight, DeviceOrientation.portraitUp].
+  ///
   final DeviceOrientation deviceOrientation;
+
+  ///Método que será executado quando houver a detecção de um código de barras.
+  /// Retorna os dados do código de barras detectado.
+  ///
   final Function(String) onDetect;
 
   @override

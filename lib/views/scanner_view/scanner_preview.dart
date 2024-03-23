@@ -4,20 +4,55 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_type_enum.dart';
+
+///Define o tipo de scanner.
+///
+/// [QRCODE_SCANNER, BARCODE_SCANNER]
+enum ScannerType {
+  ///Leitor de QRCode
+  ///
+  QRCODE_SCANNER(type: 'QRCODE_SCANNER'),
+
+  ///Leitor de códigos de barra
+  ///
+  BARCODE_SCANNER(type: 'BARCODE_SCANNER');
+
+  final String type;
+
+  const ScannerType({required this.type});
+}
 
 final class ScannerPreview extends StatefulWidget {
+  ///Essa classe define o comportamento da camera ao scanear uma imagem.
+  ///
   const ScannerPreview({
     super.key,
     required this.child,
     required this.scannerType,
     required this.deviceOrientation,
     required this.onCaptureImage,
-  });
+  }) : assert(deviceOrientation != DeviceOrientation.portraitDown,
+            'A opção [DeviceOrientation.portraitDown] é inválida para este tipo BarcodeScannerView!');
 
+  ///Tipo de scanner [scannerType] que será carregado.
+  ///
+  /// Opções: [ScannerType.QRCODE_SCANNER, ScannerType.BARCODE_SCANNER].
+  ///
   final ScannerType scannerType;
+
+  ///Widget que será exibido na preview da câmera. Representa seu layout.
+  ///
   final Widget child;
+
+  ///Define a orientação padrão da preview.
+  ///
+  ///Opções: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight, DeviceOrientation.portraitUp].
+  ///
   final DeviceOrientation deviceOrientation;
+
+  ///Método que será executado quando houver a detecção da imagem.
+  /// A imagem captura é retornada.
+  ///
   final Function(InputImage inputImage) onCaptureImage;
 
   @override

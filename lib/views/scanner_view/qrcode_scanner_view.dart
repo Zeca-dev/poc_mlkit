@@ -3,15 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_preview_app.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_type_enum.dart';
+import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class QrCodeScannerView extends StatefulWidget {
+  ///Essa define o um scanner de QRCodes.
+  ///
   const QrCodeScannerView({
     super.key,
     required this.onDetect,
   });
 
+  ///Método que será executado quando houver a detecção de um QRCode.
+  /// Retorna os dados do QRCode detectado.
+  ///
   final Function(String) onDetect;
 
   @override

@@ -6,7 +6,8 @@ import 'package:poc_mlkit/views/photo_view.dart/photo_view.dart';
 import 'package:poc_mlkit/views/photo_view.dart/photo_view_layout.dart';
 import 'package:poc_mlkit/views/scanner_view/barcode_scanner_view.dart';
 import 'package:poc_mlkit/views/scanner_view/qrcode_scanner_view.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_type_enum.dart';
+
+import 'scanner_view/scanner_preview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(
                   builder: (context) => PhotoCameraView(
                     photoViewLayout: Teste(
-                      deviceOrientation: DeviceOrientation.portraitUp,
+                      deviceOrientation: DeviceOrientation.portraitDown,
                       onCaptureImage: (p0) {
                         setState(() {
                           _foto = p0.bytes;
