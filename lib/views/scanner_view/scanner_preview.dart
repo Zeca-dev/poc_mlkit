@@ -71,7 +71,46 @@ class _ScannerPreviewState extends State<ScannerPreview> {
     _initialize();
   }
 
-  void _initialize() async {
+  @override
+  void dispose() {
+    _stopCamera();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: (_cameras.isEmpty || _controller == null || _controller?.value.isInitialized == false)
+            ? Container()
+            : SizedBox.expand(
+                child: CameraPreview(
+                  _controller!,
+                  child: Center(
+                    child: switch (widget.scannerType) {
+                      ScannerType.QRCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
+                          if (orientation == Orientation.landscape) {
+                            SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                          }
+                          return widget.child;
+                        }),
+                      ScannerType.BARCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
+                          if (orientation == Orientation.portrait) {
+                            SystemChrome.setPreferredOrientations([widget.deviceOrientation]);
+                          }
+                          return widget.child;
+                        }),
+                    },
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+
+  Future<void> _initialize() async {
     if (_cameras.isEmpty) {
       _cameras = await availableCameras();
     }
@@ -86,50 +125,7 @@ class _ScannerPreviewState extends State<ScannerPreview> {
     }
   }
 
-  @override
-  void dispose() {
-    _stopCamera();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: _cameraBody());
-  }
-
-  Widget _cameraBody() {
-    if (_cameras.isEmpty) return Container();
-    if (_controller == null) return Container();
-    if (_controller?.value.isInitialized == false) return Container();
-
-    return SafeArea(
-      child: SizedBox.expand(
-        child: CameraPreview(
-          _controller!,
-          child: Center(
-            child: switch (widget.scannerType) {
-              ScannerType.QRCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
-                  if (orientation == Orientation.landscape) {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                  }
-                  return widget.child;
-                }),
-              ScannerType.BARCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
-                  if (orientation == Orientation.portrait) {
-                    SystemChrome.setPreferredOrientations([widget.deviceOrientation]);
-                  }
-                  return widget.child;
-                }),
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future _startScamera() async {
+  Future<void> _startScamera() async {
     final camera = _cameras[_cameraIndex];
     _controller = CameraController(
       camera,
@@ -164,7 +160,7 @@ class _ScannerPreviewState extends State<ScannerPreview> {
     });
   }
 
-  Future _stopCamera() async {
+  Future<void> _stopCamera() async {
     await _controller?.stopImageStream();
     await _controller?.dispose();
     _controller = null;

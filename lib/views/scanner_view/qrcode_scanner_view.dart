@@ -159,7 +159,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
         }
       });
     } catch (error) {
-      log(error.toString());
+      log(error.toString(), name: 'QrCodeScannerView._processImage()');
     }
 
     _isBusy = false;

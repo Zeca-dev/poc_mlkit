@@ -132,7 +132,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
         }
       });
     } catch (error) {
-      log(error.toString());
+      log(error.toString(), name: 'BarcodeScannerView._processImage()');
     }
 
     _isBusy = false;
