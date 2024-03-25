@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:camera/camera.dart';
 
 import 'app_camera_preview.dart';
 
@@ -32,21 +33,38 @@ class _AppCameraViewState extends State<AppCameraView> {
 
   @override
   Widget build(BuildContext context) {
+    const colorFundo = Color(0xB3000000);
     return AppCameraPreview(
       onInit: (cameraController) {
         _cameraController = cameraController;
       },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: ElevatedButton(
-              onPressed: () async {
-                final bytes = await _takePicture();
-                if (bytes != null) {
-                  _onCapture(bytes);
-                }
-              },
-              child: const Text('Teste')),
+      child: SafeArea(
+        child: Column(
+          children: [
+            const Spacer(),
+            Container(
+              color: colorFundo,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white70,
+                    child: IconButton(
+                        onPressed: () async {
+                          final bytes = await _takePicture();
+                          if (bytes != null) {
+                            _onCapture(bytes);
+                          }
+                        },
+                        icon: const Icon(Icons.camera_alt, size: 30)),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

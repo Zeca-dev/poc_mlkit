@@ -42,7 +42,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            _QRCodeView(size: Size(size.width, size.height)),
+            _QRCodeCustomPaint(size: size),
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
               child: Column(
@@ -107,15 +107,15 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
   }
 }
 
-class _QRCodeView extends StatefulWidget {
+class _QRCodeCustomPaint extends StatefulWidget {
   final Size size;
-  const _QRCodeView({required this.size});
+  const _QRCodeCustomPaint({required this.size});
 
   @override
-  State<_QRCodeView> createState() => _QRCodeViewState();
+  State<_QRCodeCustomPaint> createState() => _QRCodeCustomPaintState();
 }
 
-class _QRCodeViewState extends State<_QRCodeView> {
+class _QRCodeCustomPaintState extends State<_QRCodeCustomPaint> {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
