@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 ///Define o tipo de scanner.
@@ -83,6 +84,7 @@ class _ScannerPreviewState extends State<ScannerPreview> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey,
         body: (_cameras.isEmpty || _controller == null || _controller?.value.isInitialized == false)
             ? Container()
             : SizedBox.expand(

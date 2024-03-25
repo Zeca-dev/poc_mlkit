@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:poc_mlkit/views/camera_view/app_camera_view.dart';
-import 'package:poc_mlkit/views/scanner_view/barcode_scanner_view.dart';
+import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
+import 'camera_view/app_camera_view.dart';
+import 'scanner_view/barcode_scanner_view.dart';
 import 'scanner_view/qrcode_scanner_view.dart';
-import 'scanner_view/scanner_preview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -31,23 +31,25 @@ class _HomePageState extends State<HomePage> {
           title: Text(widget.title),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (_foto != null)
-                Image.memory(
-                  _foto!,
-                  height: 400,
-                  width: 400,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (_foto != null)
+                  Image.memory(
+                    _foto!,
+                    height: 400,
+                    width: 400,
+                  ),
+                const Text(
+                  'Código de barras:',
                 ),
-              const Text(
-                'Código de barras:',
-              ),
-              Text(
-                _result,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ],
+                Text(
+                  _result,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: Row(
@@ -80,7 +82,6 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => BarcodeScannerView(
-                      deviceOrientation: DeviceOrientation.landscapeLeft,
                       onDetect: (result) {
                         setState(() {
                           _result = result;

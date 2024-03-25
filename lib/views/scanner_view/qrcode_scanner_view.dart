@@ -44,7 +44,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
           children: [
             _QRCodeCustomPaint(size: size),
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -131,11 +131,13 @@ class _QRCodeScannerPainter extends CustomPainter {
   _QRCodeScannerPainter({required this.size});
 
   final line = 30.0;
-  final sizeQR = const Size(220, 220);
 
   @override
   void paint(Canvas canvas, Size size) {
     const colorFundo = Color(0xB3000000);
+    const widthFactor = 0.60;
+
+    final sizeQR = Size(size.width * widthFactor, size.width * widthFactor);
 
     final paintBackground = Paint()
       ..color = colorFundo
@@ -145,12 +147,12 @@ class _QRCodeScannerPainter extends CustomPainter {
 
     final paintCorners = Paint()
       ..color = Colors.red
-      ..strokeWidth = 10
+      ..strokeWidth = 5
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.stroke;
 
     //Posições do QRCode
-    final left = size.width * 0.23;
+    final left = size.width * (1.0 - widthFactor) / 2;
     final right = sizeQR.width + left;
     final top = size.height * 0.27;
     final bottom = top + sizeQR.height;
