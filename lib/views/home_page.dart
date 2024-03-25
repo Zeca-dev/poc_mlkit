@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:poc_mlkit/views/camera_view/app_camera_view.dart';
 import 'package:poc_mlkit/views/scanner_view/barcode_scanner_view.dart';
-import 'package:poc_mlkit/views/scanner_view/qrcode_scanner_view.dart';
 
+import 'scanner_view/qrcode_scanner_view.dart';
 import 'scanner_view/scanner_preview.dart';
 
 class HomePage extends StatefulWidget {

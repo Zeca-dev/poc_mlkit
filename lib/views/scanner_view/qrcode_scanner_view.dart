@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class QrCodeScannerView extends StatefulWidget {
@@ -29,110 +31,46 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
 
   @override
   Widget build(BuildContext context) {
-    const colorFundo = Color(0xB3000000);
+    final size = MediaQuery.sizeOf(context);
+
     return ScannerPreview(
       scannerType: ScannerType.QRCODE_SCANNER,
       deviceOrientation: DeviceOrientation.portraitUp,
       onCaptureImage: _processImage,
       //
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height,
-            width: MediaQuery.sizeOf(context).width,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  children: [
-                    //Lateral esquerda
-                    Flexible(
-                      flex: 3,
-                      child: Container(
-                        decoration: const BoxDecoration(color: colorFundo),
+      child: SafeArea(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _QRCodeView(size: Size(size.width, size.height)),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child: Column(
-                        children: [
-                          //Top
-                          Flexible(
-                            flex: 4,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  decoration: const BoxDecoration(color: colorFundo),
-                                ),
-                                const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.image,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      textAlign: TextAlign.center,
-                                      'Posicione o QRCode no\n quadro abaixo',
-                                      strutStyle: StrutStyle(),
-                                      style: TextStyle(color: Colors.white, fontSize: 18),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          //Center - Scanner
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 220,
-                              width: 220,
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                              ),
-                              // child: AppIcons.scan_helper.setColor(AppColors.principal_1).setSize(220, 220),
-                              child: const _ScannerHelperView(size: 206),
-                            ),
-                          ),
-                          //Bottom
-                          Flexible(
-                            flex: 6,
-                            child: Container(
-                              decoration: const BoxDecoration(color: colorFundo),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //Lateral direita
-                    Flexible(
-                      flex: 3,
-                      child: Container(
-                        decoration: const BoxDecoration(color: colorFundo),
-                      ),
-                    ),
-                  ],
-                ),
-
-                //
-                Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'Cancelar',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                )
-              ],
+                  const SizedBox(height: 2),
+                  const Icon(Icons.qr_code, color: Colors.white, size: 80),
+                  const Text(
+                    'Posicione o QRCode no\n quadro abaixo',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 20, wordSpacing: 1),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -169,80 +107,96 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
   }
 }
 
-class _ScannerHelperView extends StatefulWidget {
-  final double size;
-  const _ScannerHelperView({super.key, required this.size});
+class _QRCodeView extends StatefulWidget {
+  final Size size;
+  const _QRCodeView({required this.size});
 
   @override
-  State<_ScannerHelperView> createState() => _ScannerHelperViewState();
+  State<_QRCodeView> createState() => _QRCodeViewState();
 }
 
-class _ScannerHelperViewState extends State<_ScannerHelperView> {
+class _QRCodeViewState extends State<_QRCodeView> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: CustomPaint(
-        size: Size(widget.size, widget.size),
-        painter: _ScannerHelperPainter(size: widget.size),
-      ),
+    return CustomPaint(
+      size: widget.size,
+      painter: _QRCodeScannerPainter(size: widget.size),
     );
   }
 }
 
-class _ScannerHelperPainter extends CustomPainter {
-  final double size;
+class _QRCodeScannerPainter extends CustomPainter {
+  final Size size;
 
-  _ScannerHelperPainter({super.repaint, required this.size});
+  _QRCodeScannerPainter({required this.size});
 
-  final strokeWidth = 10.0;
   final line = 30.0;
+  final sizeQR = const Size(220, 220);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    const colorFundo = Color(0xB3000000);
+
+    final paintBackground = Paint()
+      ..color = colorFundo
+      ..strokeWidth = 10
+      ..strokeCap = StrokeCap.square
+      ..style = PaintingStyle.fill;
+
+    final paintCorners = Paint()
       ..color = Colors.red
-      ..strokeWidth = strokeWidth
+      ..strokeWidth = 10
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.stroke;
 
-    canvas.drawPath(_createTopLeft(), paint);
-    canvas.drawPath(_createTopRight(), paint);
-    canvas.drawPath(_creatBottomRight(), paint);
+    //Posições do QRCode
+    final left = size.width * 0.23;
+    final right = sizeQR.width + left;
+    final top = size.height * 0.27;
+    final bottom = top + sizeQR.height;
+
+    final backgroundPath = Path()..addRect(Offset.zero & size);
+
+    final rectangleQRCode = Path()
+      ..addRect(
+        Rect.fromLTWH(left, top, sizeQR.width, sizeQR.height),
+      );
+
+    final pathCombined = Path.combine(PathOperation.difference, backgroundPath, rectangleQRCode);
+    canvas.drawPath(pathCombined, paintBackground);
+
+    final borderTopLeft = Path()
+      ..moveTo(left, top)
+      ..lineTo(left, top + line)
+      ..moveTo(left, top)
+      ..lineTo(left + line, top);
+
+    final borderTopRight = Path()
+      ..moveTo(right, top)
+      ..lineTo(right, top + line)
+      ..moveTo(right, top)
+      ..lineTo(right - line, top);
+
+    final borderBottomLeft = Path()
+      ..moveTo(left, bottom)
+      ..lineTo(left, bottom - line)
+      ..moveTo(left, bottom)
+      ..lineTo(left + line, bottom);
+
+    final borderBottomRight = Path()
+      ..moveTo(right, bottom)
+      ..lineTo(right, bottom - line)
+      ..moveTo(right, bottom)
+      ..lineTo(right - line, bottom);
+
+    canvas.drawPath(borderTopLeft, paintCorners);
+    canvas.drawPath(borderTopRight, paintCorners);
+    canvas.drawPath(borderBottomLeft, paintCorners);
+    canvas.drawPath(borderBottomRight, paintCorners);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
-  }
-
-  Path _createTopLeft() {
-    return Path()
-          ..moveTo(0, 0)
-          ..lineTo(0, line)
-          ..moveTo(0, 0)
-          ..lineTo(line, 0)
-//
-        ;
-  }
-
-  Path _createTopRight() {
-    return Path()
-          ..moveTo(size - (line + strokeWidth), 0)
-          ..lineTo(size - strokeWidth, 0)
-          ..moveTo(size - strokeWidth, 0)
-          ..lineTo(size - strokeWidth, line)
-//
-        ;
-  }
-
-  Path _creatBottomRight() {
-    return Path()
-          ..moveTo(size - strokeWidth, size - (strokeWidth + line))
-          ..lineTo(size - strokeWidth, size - strokeWidth)
-// ..moveTo(size.height - 5, size.height)
-// ..lineTo(size.height - 5, line)
-//
-        ;
   }
 }
