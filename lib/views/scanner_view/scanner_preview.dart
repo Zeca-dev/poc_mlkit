@@ -148,10 +148,13 @@ class _ScannerPreviewState extends State<ScannerPreview> {
 
         case ScannerType.BARCODE_SCANNER:
           {
-            if (widget.deviceOrientation == DeviceOrientation.landscapeLeft) {
-              _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
-            } else {
-              _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+            if (Platform.isIOS) {
+              //TODO: VERIFICAR ESSE COMPORTAMENTO NO ANDROID
+              if (widget.deviceOrientation == DeviceOrientation.landscapeLeft) {
+                _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
+              } else {
+                _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+              }
             }
           }
       }
