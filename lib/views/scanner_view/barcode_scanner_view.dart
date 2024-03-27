@@ -83,7 +83,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Spacer(flex: 3),
+                    const Spacer(flex: 4),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton(
@@ -97,7 +97,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
                             style: TextStyle(fontSize: 20),
                           )),
                     ),
-                    const Spacer(),
+                    const Spacer(flex: 2),
                     DecoratedBox(
                       decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(16)),
                       child: DecoratedBox(
