@@ -111,7 +111,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
                             child: const Icon(Icons.paste, color: Colors.white, size: 30)),
                       ),
                     ),
-                    const Spacer(),
+                    const Spacer(flex: 2),
                   ],
                 ),
               ),

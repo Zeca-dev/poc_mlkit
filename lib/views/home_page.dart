@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 import 'camera_view/app_camera_view.dart';
