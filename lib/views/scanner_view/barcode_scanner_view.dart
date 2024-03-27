@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class BarcodeScannerView extends StatefulWidget {
@@ -50,26 +51,82 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
           children: [
             _BarcodeCustomPaint(size: size),
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                  const SizedBox(height: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        MdiIcons.barcodeScan,
+                        color: Colors.white,
+                        size: 50,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Posicione o código de barras na área indicada',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ],
+                  )
                 ],
               ),
-            )
+            ),
+
+            //Buttons
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 3),
+                    SizedBox(
+                      width: 300,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.all(16)),
+                          onPressed: () {},
+                          child: const Text(
+                            'Digitar código de barras',
+                            style: TextStyle(fontSize: 20),
+                          )),
+                    ),
+                    const Spacer(),
+                    DecoratedBox(
+                      decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(16)),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(16)),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () {},
+                            child: const Icon(Icons.paste, color: Colors.white, size: 30)),
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+
+            //Button close
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              ),
+            ),
           ],
         ),
       ),
