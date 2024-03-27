@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class BarcodeScannerView extends StatefulWidget {
@@ -136,27 +134,35 @@ class _BarcodePainter extends CustomPainter {
 
   _BarcodePainter({required this.size});
 
+  final cornerSize = 30.0;
+
   @override
   void paint(Canvas canvas, Size size) {
-    const colorFundo = Color(0xB3000000);
     const widthFactor = 0.80;
+    const strokeWidth = 15.0;
+    const strokeFactor = strokeWidth / 2;
 
-    final sizeBarcode = Size(size.width * widthFactor, size.height * 0.3);
+    final barcodeWidth = size.width * widthFactor;
+    final barcodeHeigth = size.height * 0.4;
+    final sizeBarcode = Size(barcodeWidth, barcodeHeigth);
 
-    final paintBackground = Paint()
-      ..color = colorFundo
-      ..style = PaintingStyle.fill;
-
-    final paintBorders = Paint()
+    final paintCorners = Paint()
       ..color = Colors.red
-      ..strokeWidth = 3
+      ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.stroke;
 
     //Posições do Barcode
     final left = size.width * (1.0 - widthFactor) / 2;
-    final top = size.height * 0.2;
+    final right = sizeBarcode.width + left;
+    final top = size.height * 0.3;
     final bottom = top + sizeBarcode.height;
+
+    //Background params
+    const colorFundo = Color(0xB3000000);
+    final paintBackground = Paint()
+      ..color = colorFundo
+      ..style = PaintingStyle.fill;
 
     final backgroundPath = Path()..addRect(Offset.zero & size);
 
@@ -168,15 +174,48 @@ class _BarcodePainter extends CustomPainter {
     final pathCombined = Path.combine(PathOperation.difference, backgroundPath, rectangleBarCode);
     canvas.drawPath(pathCombined, paintBackground);
 
-    //Bordas
-    final path = Path()
-      ..moveTo(left, top)
-      ..lineTo(sizeBarcode.width + left, top)
-      ..lineTo(sizeBarcode.width + left, bottom)
-      ..lineTo(left, bottom)
-      ..lineTo(left, top);
+    //cornerPath
+    final borderTopLeft = Path()
+      ..moveTo(left + strokeFactor, top + strokeFactor)
+      ..lineTo(left + strokeFactor, top + cornerSize)
+      ..moveTo(left + strokeFactor, top + strokeFactor)
+      ..lineTo(left + strokeFactor + cornerSize, top + strokeFactor);
 
-    canvas.drawPath(path, paintBorders);
+    final borderTopRight = Path()
+      ..moveTo(right - strokeFactor, top + strokeFactor)
+      ..lineTo(right - strokeFactor, top + cornerSize)
+      ..moveTo(right - strokeFactor, top + strokeFactor)
+      ..lineTo(right - strokeFactor - cornerSize, top + strokeFactor);
+
+    final borderBottomLeft = Path()
+      ..moveTo(left + strokeFactor, bottom - strokeFactor)
+      ..lineTo(left + strokeFactor, bottom - cornerSize)
+      ..moveTo(left + strokeFactor, bottom - strokeFactor)
+      ..lineTo(left + strokeFactor + cornerSize, bottom - strokeFactor);
+
+    final borderBottomRight = Path()
+      ..moveTo(right - strokeFactor, bottom - strokeFactor)
+      ..lineTo(right - strokeFactor, bottom - cornerSize)
+      ..moveTo(right - strokeFactor, bottom - strokeFactor)
+      ..lineTo(right - strokeFactor - cornerSize, bottom - strokeFactor);
+
+    canvas.drawPath(borderTopLeft, paintCorners);
+    canvas.drawPath(borderTopRight, paintCorners);
+    canvas.drawPath(borderBottomLeft, paintCorners);
+    canvas.drawPath(borderBottomRight, paintCorners);
+
+    //line central
+    final paintLine = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 5
+      ..strokeCap = StrokeCap.square
+      ..style = PaintingStyle.stroke;
+
+    final lineCentralPath = Path()
+      ..moveTo(barcodeWidth * 0.2, top + barcodeHeigth / 2)
+      ..lineTo(barcodeWidth + barcodeWidth * 0.05, top + barcodeHeigth / 2);
+
+    canvas.drawPath(lineCentralPath, paintLine);
   }
 
   @override

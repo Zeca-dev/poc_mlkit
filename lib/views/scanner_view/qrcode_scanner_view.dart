@@ -128,14 +128,14 @@ class _QRCodeScannerPainter extends CustomPainter {
 
   _QRCodeScannerPainter({required this.size});
 
-  final line = 30.0;
+  final line = 70.0;
 
   @override
   void paint(Canvas canvas, Size size) {
     const colorFundo = Color(0xB3000000);
     const widthFactor = 0.60;
     const strokeWidth = 10.0;
-    const strokeWidthFactor = 10.0;
+    const strokeFactor = strokeWidth / 2;
 
     final sizeQR = Size(size.width * widthFactor, size.width * widthFactor);
 
@@ -147,7 +147,7 @@ class _QRCodeScannerPainter extends CustomPainter {
 
     final paintCorners = Paint()
       ..color = Colors.red
-      ..strokeWidth = 5
+      ..strokeWidth = 10
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.stroke;
 
@@ -168,28 +168,28 @@ class _QRCodeScannerPainter extends CustomPainter {
     canvas.drawPath(pathCombined, paintBackground);
 
     final borderTopLeft = Path()
-      ..moveTo(left, top)
-      ..lineTo(left, top + line)
-      ..moveTo(left, top)
-      ..lineTo(left + line, top);
+      ..moveTo(left + strokeFactor, top + strokeFactor)
+      ..lineTo(left + strokeFactor, top + line)
+      ..moveTo(left + strokeFactor, top + strokeFactor)
+      ..lineTo(left + strokeFactor + line, top + strokeFactor);
 
     final borderTopRight = Path()
-      ..moveTo(right, top)
-      ..lineTo(right, top + line)
-      ..moveTo(right, top)
-      ..lineTo(right - line, top);
+      ..moveTo(right - strokeFactor, top + strokeFactor)
+      ..lineTo(right - strokeFactor, top + line)
+      ..moveTo(right - strokeFactor, top + strokeFactor)
+      ..lineTo(right - strokeFactor - line, top + strokeFactor);
 
     final borderBottomLeft = Path()
-      ..moveTo(left, bottom)
-      ..lineTo(left, bottom - line)
-      ..moveTo(left, bottom)
-      ..lineTo(left + line, bottom);
+      ..moveTo(left + strokeFactor, bottom - strokeFactor)
+      ..lineTo(left + strokeFactor, bottom - line)
+      ..moveTo(left + strokeFactor, bottom - strokeFactor)
+      ..lineTo(left + strokeFactor + line, bottom - strokeFactor);
 
     final borderBottomRight = Path()
-      ..moveTo(right, bottom)
-      ..lineTo(right, bottom - line)
-      ..moveTo(right, bottom)
-      ..lineTo(right - line, bottom);
+      ..moveTo(right - strokeFactor, bottom - strokeFactor)
+      ..lineTo(right - strokeFactor, bottom - line)
+      ..moveTo(right - strokeFactor, bottom - strokeFactor)
+      ..lineTo(right - strokeFactor - line, bottom - strokeFactor);
 
     canvas.drawPath(borderTopLeft, paintCorners);
     canvas.drawPath(borderTopRight, paintCorners);
