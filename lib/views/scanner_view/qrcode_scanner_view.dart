@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 class QrCodeScannerView extends StatefulWidget {
@@ -136,12 +134,14 @@ class _QRCodeScannerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const colorFundo = Color(0xB3000000);
     const widthFactor = 0.60;
+    const strokeWidth = 10.0;
+    const strokeWidthFactor = 10.0;
 
     final sizeQR = Size(size.width * widthFactor, size.width * widthFactor);
 
     final paintBackground = Paint()
       ..color = colorFundo
-      ..strokeWidth = 10
+      ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.fill;
 
