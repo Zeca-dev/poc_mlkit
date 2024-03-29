@@ -156,6 +156,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
             }
           }
         }
+        _barcodeScanner.close();
       });
     } catch (error) {
       log(error.toString(), name: 'BarcodeScannerView._processImage()');

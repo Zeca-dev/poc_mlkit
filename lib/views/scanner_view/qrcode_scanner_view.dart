@@ -93,6 +93,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
             Navigator.pop(context);
           }
         }
+        _barcodeScanner.close();
       });
     } catch (error) {
       log(error.toString(), name: 'QrCodeScannerView._processImage()');

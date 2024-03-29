@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 ///Define o tipo de scanner.
@@ -76,7 +75,6 @@ class _ScannerPreviewState extends State<ScannerPreview> {
   void dispose() {
     _stopCamera();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
     super.dispose();
   }
 
