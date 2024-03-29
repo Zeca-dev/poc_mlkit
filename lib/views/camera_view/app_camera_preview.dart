@@ -1,18 +1,17 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:camera/camera.dart';
 
 final class AppCameraPreview extends StatefulWidget {
   ///Essa abre a camera do dispositivo para a captura de uma imagem.
   ///
   const AppCameraPreview({
-    Key? key,
+    super.key,
     required this.child,
     required this.onInit,
-  }) : super(key: key);
+  });
 
   ///Widget que será exibido na preview da câmera. Representa seu layout.
   ///
@@ -52,7 +51,7 @@ class _AppCameraPreviewState extends State<AppCameraPreview> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.transparent,
       body: (_cameras.isEmpty || _controller == null || _controller?.value.isInitialized == false)
           ? Container()
           : SizedBox.expand(

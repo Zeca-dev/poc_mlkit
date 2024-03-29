@@ -82,7 +82,7 @@ class _ScannerPreviewState extends State<ScannerPreview> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.transparent,
         body: (_cameras.isEmpty || _controller == null || _controller?.value.isInitialized == false)
             ? Container()
             : SizedBox.expand(
@@ -147,7 +147,6 @@ class _ScannerPreviewState extends State<ScannerPreview> {
         case ScannerType.BARCODE_SCANNER:
           {
             if (Platform.isIOS) {
-              //TODO: VERIFICAR ESSE COMPORTAMENTO NO ANDROID
               if (widget.deviceOrientation == DeviceOrientation.landscapeLeft) {
                 _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
               } else {

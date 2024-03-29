@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:document_file_save_plus/document_file_save_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
@@ -104,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                       onImageCapture: (inputImage) {
                         setState(() {
                           _foto = inputImage;
+                          DocumentFileSavePlus().saveFile(_foto!, 'foto.jpg', 'image.png');
                           print(_foto);
 
                           setState(() {});
