@@ -5,40 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
-///Define o tipo de scanner.
-///
-/// [QRCODE_SCANNER, BARCODE_SCANNER]
-enum ScannerType {
-  ///Leitor de QRCode
-  ///
-  QRCODE_SCANNER(type: 'QRCODE_SCANNER'),
-
-  ///Leitor de códigos de barra
-  ///
-  BARCODE_SCANNER(type: 'BARCODE_SCANNER');
-
-  final String type;
-
-  const ScannerType({required this.type});
-}
-
-final class ScannerPreview extends StatefulWidget {
+final class BarcodeScannerPreview extends StatefulWidget {
   ///Essa classe define o comportamento da camera ao scanear uma imagem.
   ///
-  const ScannerPreview({
+  const BarcodeScannerPreview({
     super.key,
     required this.child,
-    required this.scannerType,
     required this.deviceOrientation,
     required this.onCaptureImage,
   }) : assert(deviceOrientation != DeviceOrientation.portraitDown,
             'A opção [DeviceOrientation.portraitDown] é inválida para este tipo BarcodeScannerView!');
-
-  ///Tipo de scanner [scannerType] que será carregado.
-  ///
-  /// Opções: [ScannerType.QRCODE_SCANNER, ScannerType.BARCODE_SCANNER].
-  ///
-  final ScannerType scannerType;
 
   ///Widget que será exibido na preview da câmera. Representa seu layout.
   ///
@@ -56,10 +32,10 @@ final class ScannerPreview extends StatefulWidget {
   final Function(InputImage inputImage) onCaptureImage;
 
   @override
-  State<ScannerPreview> createState() => _ScannerPreviewState();
+  State<BarcodeScannerPreview> createState() => _BarcodeScannerPreviewState();
 }
 
-class _ScannerPreviewState extends State<ScannerPreview> {
+class _BarcodeScannerPreviewState extends State<BarcodeScannerPreview> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
@@ -89,20 +65,12 @@ class _ScannerPreviewState extends State<ScannerPreview> {
                 child: CameraPreview(
                   _controller!,
                   child: Center(
-                    child: switch (widget.scannerType) {
-                      ScannerType.QRCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
-                          if (orientation == Orientation.landscape) {
-                            SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                          }
-                          return widget.child;
-                        }),
-                      ScannerType.BARCODE_SCANNER => OrientationBuilder(builder: (context, orientation) {
-                          if (orientation == Orientation.portrait) {
-                            SystemChrome.setPreferredOrientations([widget.deviceOrientation]);
-                          }
-                          return widget.child;
-                        }),
-                    },
+                    child: OrientationBuilder(builder: (context, orientation) {
+                      if (orientation == Orientation.portrait) {
+                        SystemChrome.setPreferredOrientations([widget.deviceOrientation]);
+                      }
+                      return widget.child;
+                    }),
                   ),
                 ),
               ),
@@ -140,20 +108,12 @@ class _ScannerPreviewState extends State<ScannerPreview> {
         return;
       }
 
-      switch (widget.scannerType) {
-        case ScannerType.QRCODE_SCANNER:
-          _controller?.lockCaptureOrientation(DeviceOrientation.portraitUp);
-
-        case ScannerType.BARCODE_SCANNER:
-          {
-            if (Platform.isIOS) {
-              if (widget.deviceOrientation == DeviceOrientation.landscapeLeft) {
-                _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
-              } else {
-                _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
-              }
-            }
-          }
+      if (Platform.isIOS) {
+        if (widget.deviceOrientation == DeviceOrientation.landscapeLeft) {
+          _controller?.lockCaptureOrientation(DeviceOrientation.landscapeRight);
+        } else {
+          _controller?.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+        }
       }
 
       _controller?.startImageStream(_processCameraImage).then((value) {});

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:document_file_save_plus/document_file_save_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
 
 import 'camera_view/app_camera_view.dart';
 import 'scanner_view/barcode_scanner_view.dart';
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             FloatingActionButton(
-              heroTag: ScannerType.QRCODE_SCANNER,
+              heroTag: 'qr_code',
               onPressed: () async {
                 Navigator.push(
                   context,
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               child: const Icon(Icons.qr_code),
             ),
             FloatingActionButton(
-              heroTag: ScannerType.BARCODE_SCANNER,
+              heroTag: 'barcode',
               onPressed: () async {
                 Navigator.push(
                   context,
@@ -96,7 +95,7 @@ class _HomePageState extends State<HomePage> {
               child: const Icon(Icons.barcode_reader),
             ),
             FloatingActionButton(
-              heroTag: 'teste',
+              heroTag: 'camera',
               onPressed: () async {
                 Navigator.push(
                   context,

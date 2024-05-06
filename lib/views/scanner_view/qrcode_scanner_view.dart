@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
+import 'package:poc_mlkit/views/scanner_view/qrcode_scanner_preview.dart';
 
 class QrCodeScannerView extends StatefulWidget {
   ///Essa define o um scanner de QRCodes.
@@ -31,8 +31,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    return ScannerPreview(
-      scannerType: ScannerType.QRCODE_SCANNER,
+    return QrCodeScannerPreview(
       deviceOrientation: DeviceOrientation.portraitUp,
       onCaptureImage: _processImage,
       //

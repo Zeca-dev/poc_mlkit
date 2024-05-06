@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:poc_mlkit/views/scanner_view/scanner_preview.dart';
+import 'package:poc_mlkit/views/scanner_view/barcode_scanner_preview.dart';
 
 class BarcodeScannerView extends StatefulWidget {
   ///Essa define o um scanner de códigos de barra.
@@ -39,8 +39,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    return ScannerPreview(
-      scannerType: ScannerType.BARCODE_SCANNER,
+    return BarcodeScannerPreview(
       deviceOrientation: widget.deviceOrientation,
       onCaptureImage: _processImage,
 
