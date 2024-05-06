@@ -14,7 +14,7 @@ final class BarcodeScannerPreview extends StatefulWidget {
     required this.deviceOrientation,
     required this.onCaptureImage,
   }) : assert(deviceOrientation != DeviceOrientation.portraitDown,
-            'A opção [DeviceOrientation.portraitDown] é inválida para este tipo BarcodeScannerView!');
+            'A opção [DeviceOrientation.portraitDown] é inválida para BarcodeScannerView!');
 
   ///Widget que será exibido na preview da câmera. Representa seu layout.
   ///
