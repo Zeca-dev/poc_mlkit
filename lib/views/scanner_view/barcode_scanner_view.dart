@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:poc_mlkit/views/scanner_view/barcode_scanner_preview.dart';
 
 ///Essa classe define o um scanner de códigos de barra.
@@ -151,7 +153,9 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
               _canProcess = false;
 
               widget.onDetect.call(displayValue);
-              Navigator.pop(context);
+              if (mounted) {
+                Navigator.pop(context);
+              }
             }
           }
         }

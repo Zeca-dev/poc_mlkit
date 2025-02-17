@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:document_file_save_plus/document_file_save_plus.dart';
+import 'package:app_utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'camera_view/app_camera_view.dart';
 import 'scanner_view/barcode_scanner_view.dart';
@@ -104,8 +105,17 @@ class _HomePageState extends State<HomePage> {
                       onImageCapture: (inputImage) {
                         setState(() {
                           _foto = inputImage;
-                          DocumentFileSavePlus().saveFile(_foto!, 'foto.jpg', 'image.png');
-                          print(_foto);
+                          // DocumentFileSavePlus().saveFile(_foto!, 'foto.jpg', 'image.png');
+
+                          AppBase64.fromUint8List(_foto!).split(
+                            (success) async {
+                              var status = await Permission.storage.status;
+                              if (status.isGranted) {
+                                await AppFiles.salvarArquivo(success.toString(), name: 'foto');
+                              }
+                            },
+                            (failure) {},
+                          );
 
                           setState(() {});
                         });
