@@ -14,8 +14,10 @@ final class QrCodeScannerPreview extends StatefulWidget {
     required this.child,
     required this.deviceOrientation,
     required this.onCaptureImage,
-  }) : assert(deviceOrientation != DeviceOrientation.portraitDown,
-            'A opção [DeviceOrientation.portraitDown] é inválida para QrCodeScannerPreview!');
+  }) : assert(
+         deviceOrientation != DeviceOrientation.portraitDown,
+         'A opção [DeviceOrientation.portraitDown] é inválida para QrCodeScannerPreview!',
+       );
 
   ///Widget que será exibido na preview da câmera. Representa seu layout.
   ///
@@ -66,12 +68,14 @@ class _QrCodeScannerPreviewState extends State<QrCodeScannerPreview> {
                 child: CameraPreview(
                   _controller!,
                   child: Center(
-                    child: OrientationBuilder(builder: (context, orientation) {
-                      if (orientation == Orientation.landscape) {
-                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                      }
-                      return widget.child;
-                    }),
+                    child: OrientationBuilder(
+                      builder: (context, orientation) {
+                        if (orientation == Orientation.landscape) {
+                          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                        }
+                        return widget.child;
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -83,6 +87,15 @@ class _QrCodeScannerPreviewState extends State<QrCodeScannerPreview> {
     if (_cameras.isEmpty) {
       _cameras = await availableCameras();
     }
+
+    if (!await _hasCamera()) {
+      //TODO(zeca): mostrar mensagem de erro
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      return;
+    }
+
     for (var i = 0; i < _cameras.length; i++) {
       if (_cameras[i].lensDirection == CameraLensDirection.back) {
         _cameraIndex = i;
@@ -106,6 +119,14 @@ class _QrCodeScannerPreviewState extends State<QrCodeScannerPreview> {
 
     _controller?.initialize().then((_) {
       if (!mounted) {
+        return;
+      }
+
+      if (!_hasAutoFocus()) {
+        //TODO(zeca): mostrar mensagem de erro e só depois fechar
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
         return;
       }
 
@@ -192,5 +213,15 @@ class _QrCodeScannerPreviewState extends State<QrCodeScannerPreview> {
         bytesPerRow: plane.bytesPerRow, // used only in iOS
       ),
     );
+  }
+
+  Future<bool> _hasCamera() async {
+    final cameras = await availableCameras();
+    return cameras.isNotEmpty;
+  }
+
+  bool _hasAutoFocus() {
+    final mode = _controller?.value.focusMode;
+    return _controller?.value.isInitialized == true && mode == FocusMode.auto;
   }
 }
