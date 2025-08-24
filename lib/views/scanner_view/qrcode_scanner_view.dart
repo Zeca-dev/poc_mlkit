@@ -10,10 +10,7 @@ import 'package:poc_mlkit/views/scanner_view/qrcode_scanner_preview.dart';
 ///Essa classe define o um scanner de QRCodes.
 ///
 class QrCodeScannerView extends StatefulWidget {
-  const QrCodeScannerView({
-    super.key,
-    required this.onDetect,
-  });
+  const QrCodeScannerView({super.key, required this.onDetect});
 
   ///Método que será executado quando houver a detecção de um QRCode.
   /// Retorna os dados do QRCode detectado.
@@ -53,10 +50,7 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                      child: const Text('Cancelar', style: TextStyle(color: Colors.white, fontSize: 18)),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -84,9 +78,9 @@ class _QrCodeScannerViewState extends State<QrCodeScannerView> {
     _barcodeScanner = BarcodeScanner(formats: [BarcodeFormat.qrCode]);
 
     try {
-      await _barcodeScanner.processImage(inputImage).then((barcodes) {
-        for (Barcode barcode in barcodes) {
-          final String? displayValue = barcode.displayValue;
+      await _barcodeScanner.processImage(inputImage).then((qrcodes) {
+        for (Barcode qrcode in qrcodes) {
+          final String? displayValue = qrcode.displayValue;
 
           if (displayValue != null) {
             _canProcess = false;
@@ -163,10 +157,7 @@ class _QRCodeScannerPainter extends CustomPainter {
 
     final backgroundPath = Path()..addRect(Offset.zero & size);
 
-    final rectangleQRCode = Path()
-      ..addRect(
-        Rect.fromLTWH(left, top, sizeQR.width, sizeQR.height),
-      );
+    final rectangleQRCode = Path()..addRect(Rect.fromLTWH(left, top, sizeQR.width, sizeQR.height));
 
     final pathCombined = Path.combine(PathOperation.difference, backgroundPath, rectangleQRCode);
     canvas.drawPath(pathCombined, paintBackground);

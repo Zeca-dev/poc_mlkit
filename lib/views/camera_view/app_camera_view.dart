@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:camera/camera.dart';
 
 import 'app_camera_preview.dart';
 
@@ -52,13 +53,14 @@ class _AppCameraViewState extends State<AppCameraView> {
                     radius: 30,
                     backgroundColor: Colors.white70,
                     child: IconButton(
-                        onPressed: () async {
-                          final bytes = await _takePicture();
-                          if (bytes != null) {
-                            _onCapture(bytes);
-                          }
-                        },
-                        icon: const Icon(Icons.camera_alt, size: 30)),
+                      onPressed: () async {
+                        final bytes = await _takePicture();
+                        if (bytes != null) {
+                          _onCapture(bytes);
+                        }
+                      },
+                      icon: const Icon(Icons.camera_alt, size: 30),
+                    ),
                   ),
                 ],
               ),
@@ -70,7 +72,6 @@ class _AppCameraViewState extends State<AppCameraView> {
   }
 
   Future<Uint8List?> _takePicture() async {
-    await _cameraController?.startVideoRecording();
     final image = await _cameraController?.takePicture();
     if (image == null) {
       return null;

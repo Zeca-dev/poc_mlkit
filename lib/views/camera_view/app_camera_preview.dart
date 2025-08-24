@@ -32,6 +32,7 @@ class _AppCameraPreviewState extends State<AppCameraPreview> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     _initialize();
   }
@@ -64,7 +65,7 @@ class _AppCameraPreviewState extends State<AppCameraPreview> {
     }
 
     if (!await _hasCamera()) {
-      //TODO(zeca): mostrar mensagem de erro
+      //TODO(zeca): mostrar mensagem de erro e só depois fechar
       if (mounted) {
         Navigator.of(context).pop();
       }

@@ -89,7 +89,7 @@ class _BarcodeScannerPreviewState extends State<BarcodeScannerPreview> {
     }
 
     if (!await _hasCamera()) {
-      //TODO(zeca): mostrar mensagem de erro
+      //TODO(zeca): mostrar mensagem de erro e só depois fechar
       if (mounted) {
         Navigator.of(context).pop();
       }

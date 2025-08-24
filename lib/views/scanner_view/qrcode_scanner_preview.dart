@@ -89,7 +89,7 @@ class _QrCodeScannerPreviewState extends State<QrCodeScannerPreview> {
     }
 
     if (!await _hasCamera()) {
-      //TODO(zeca): mostrar mensagem de erro
+      //TODO(zeca): mostrar mensagem de erro e só depois fechar
       if (mounted) {
         Navigator.of(context).pop();
       }
